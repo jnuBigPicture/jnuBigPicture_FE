@@ -25,6 +25,9 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
+import { useEffect } from "react";
+import BootSplash from "react-native-bootsplash";
+
 type SectionProps = PropsWithChildren<{
   title: string;
 }>;
@@ -56,6 +59,18 @@ function Section({children, title}: SectionProps): React.JSX.Element {
 }
 
 function App(): React.JSX.Element {
+  useEffect(() => {
+    const init = async () => {
+      // 여기에 앱 초기화할 때 필요한 작업들 적어주시면 되어요
+      // ex : 로컬 저장소에서 토큰이나 설정 값 받아오기
+    };
+
+    init().finally(async () => {
+      await BootSplash.hide({ fade: true });
+      console.log("BootSplash has been hidden successfully");
+    });
+  }, []);
+
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
