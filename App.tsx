@@ -1,23 +1,13 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import React, { useEffect, useState } from 'react';
 import {
-  SafeAreaView,
-  ScrollView,
   StyleSheet,
-  Text,
   View,
-  Pressable,
 } from 'react-native';
 import BootSplash from "react-native-bootsplash";
 import { getAccessToken } from '@react-native-seoul/kakao-login';
 import MainScreen from './screens/MainScreen';
 import LoginScreen from './screens/LoginScreen';
+import { NavigationContainer } from '@react-navigation/native';
 
 function App(): React.JSX.Element {
   // 토큰 확인하는 변수
@@ -49,13 +39,13 @@ function App(): React.JSX.Element {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <NavigationContainer>
       {isLoggedIn ? (
         <MainScreen setIsLoggedIn = {setIsLoggedIn} />
       ) : (
         <LoginScreen setIsLoggedIn = {setIsLoggedIn} />
       )}
-    </View>
+    </NavigationContainer>
   );
 }
 
