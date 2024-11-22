@@ -5,64 +5,41 @@
  * @format
  */
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   SafeAreaView,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
-  useColorScheme,
   View,
+  Pressable,
 } from 'react-native';
-
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-import { useEffect } from "react";
 import BootSplash from "react-native-bootsplash";
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
+import { getAccessToken } from '@react-native-seoul/kakao-login';
+import MainScreen from './screens/MainScreen';
+import LoginScreen from './screens/LoginScreen';
 
 function App(): React.JSX.Element {
+  // 토큰 확인하는 변수
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
+
   useEffect(() => {
     const init = async () => {
-      // 여기에 앱 초기화할 때 필요한 작업들 적어주시면 되어요
-      // ex : 로컬 저장소에서 토큰이나 설정 값 받아오기
+      // 앱 초기화 작업 (예: 로컬 저장소에서 토큰이나 설정 값 가져오면 됨.
+      try {
+        const tokenInfo = await getAccessToken(); // 카카오 라이브러리를 이용해 토큰 확인
+        if(tokenInfo) {
+          console.log("토큰 이씀", tokenInfo.accessToken);
+          setIsLoggedIn(true); // 메인 화면으로 넘어가는 상태로 설정
+        } else {
+          console.log("토큰 엄는듯,,,");
+          setIsLoggedIn(false); // 로그인 화면으로 넘어가는 상태로 설정
+        }
+      }
+      catch (error) {
+        console.error("로그인 상태 확인 중 오류: ", error);
+        setIsLoggedIn(false); // 로그인 화면으로 넘어가는 상태로 설정
+      }
     };
 
     init().finally(async () => {
@@ -71,51 +48,41 @@ function App(): React.JSX.Element {
     });
   }, []);
 
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Hello">
-            Hello, world
-          </Section>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <View style={styles.container}>
+      {isLoggedIn ? (
+        <MainScreen setIsLoggedIn = {setIsLoggedIn} />
+      ) : (
+        <LoginScreen setIsLoggedIn = {setIsLoggedIn} />
+      )}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    height: "100%",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    paddingBottom: 100,
+    backgroundColor: "#FFFFFF"
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  resultContainer: {
+    width: "100%",
+    padding: 24,
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  button: {
+    backgroundColor: "#FEE500",
+    borderRadius: 40,
+    borderWidth: 1,
+    width: 250,
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 10,
   },
-  highlight: {
-    fontWeight: '700',
+  text: {
+    textAlign: "center",
   },
 });
 
