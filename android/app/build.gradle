@@ -6,6 +6,19 @@ apply plugin: "com.facebook.react"
  * This is the configuration block to customize your React Native Android app.
  * By default you don't need to apply any configuration, just uncomment the lines you need.
  */
+
+def localProperties = new Properties();
+def localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withInputStream { stream ->
+        localProperties.load(stream)
+    }
+}
+
+
+// 앱 키 로드
+def kakaoAppKey = localProperties.getProperty("KAKAO_APP_KEY")
+
 react {
     /* Folders */
     //   The root of your project, i.e. where "package.json" lives. Default is '../..'
@@ -84,6 +97,10 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        manifestPlaceholders = [
+            kakao_app_key: kakaoAppKey
+        ]
+        resValue "string", "kakao_app_key", kakaoAppKey
     }
     signingConfigs {
         debug {
