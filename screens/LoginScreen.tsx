@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, Pressable, StyleSheet, Image, StatusBar } from 'react-native';
+import { View, Text, Pressable, StyleSheet, Image } from 'react-native';
 import OAuthService from "../OAuthService";
 
 function LoginScreen({ setIsLoggedIn }: { setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean | null>> }): React.JSX.Element {
@@ -15,8 +15,6 @@ function LoginScreen({ setIsLoggedIn }: { setIsLoggedIn: React.Dispatch<React.Se
     
       return (
         <View style={styles.container}>
-          <StatusBar backgroundColor="#ffffff" barStyle="dark-content" />
-          
           <Image
             source={require("../assets/logo.png")}
             style={styles.logoImage}
