@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   View,
+  StatusBar,
 } from 'react-native';
 import BootSplash from "react-native-bootsplash";
 import { getAccessToken } from '@react-native-seoul/kakao-login';
-import MainScreen from './screens/MainScreen';
+import MainScreen from './screens/navigation/MainScreen';
 import LoginScreen from './screens/LoginScreen';
 import { NavigationContainer } from '@react-navigation/native';
 
@@ -40,6 +41,7 @@ function App(): React.JSX.Element {
 
   return (
     <NavigationContainer>
+      <StatusBar backgroundColor="#ffffff" barStyle="dark-content" />
       {isLoggedIn ? (
         <MainScreen setIsLoggedIn = {setIsLoggedIn} />
       ) : (
