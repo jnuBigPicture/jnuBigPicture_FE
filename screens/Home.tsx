@@ -1,7 +1,8 @@
+import { NavigationProp } from '@react-navigation/native';
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, Button } from 'react-native';
 
-function HomeScreen(): React.JSX.Element {
+function HomeScreen({navigation}): React.JSX.Element {
   const [isConnected, setIsConnected] = useState(false);
 
   return (
@@ -39,6 +40,7 @@ function HomeScreen(): React.JSX.Element {
                     <Text>
                         인형에게 할 말을 전달해요.
                     </Text>
+                    <Button title="버튼" onPress={() => navigation.navigate('Chat')} />
                 </View>
             </View>
         </View>

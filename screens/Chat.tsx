@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-function ChatHistory(): React.JSX.Element {
+function Chat({}): React.JSX.Element {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState<Chat[]>([]);
   const [newMessage, setNewMessage] = useState('');
@@ -83,7 +83,7 @@ const getChatData = async (): Promise<Chat[]> => {
   // const response = await fetch('https://reactnative.dev/movies.json');
   const json = {
     data: [
-      {id: '1', sender: '인형', message: '예솔아 유치원 다녀왔어?'},
+      {id: '1', sender: '인형', message: 'chat 예솔아 유치원 다녀왔어?'},
       {id: '2', sender: '예솔',message: '응. 그런데 나 유치원에서 안좋은 일 있었어.',},
       {id: '3', sender: '인형', message: '유치원에서 무슨 일 있었어?'},
       {id: '4', sender: '예솔', message: '지안이가 돼지라고 놀렸어.'},
@@ -194,4 +194,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default ChatHistory;
+export default Chat;

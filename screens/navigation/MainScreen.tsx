@@ -11,7 +11,7 @@ import CustomTabBar from './TabBar';
 
 const Tab = createBottomTabNavigator();
 
-function MainScreen({ setIsLoggedIn }: { setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean | null>> }): React.JSX.Element {
+function MainScreen({navigation}): React.JSX.Element {
   return (
     <Tab.Navigator
       tabBar={(props) => <CustomTabBar {...props} />}
@@ -20,7 +20,7 @@ function MainScreen({ setIsLoggedIn }: { setIsLoggedIn: React.Dispatch<React.Set
       }}
     >
 
-      <Tab.Screen name="홈" component={Home} />
+      <Tab.Screen name="홈" component={Home} initialParams={navigation}/>
       <Tab.Screen name="대화 기록" component={ChatHistory} />
       <Tab.Screen name="분석 리포트" component={AnalysisReport} />
       <Tab.Screen name="마이 페이지" component={MyPage} />
