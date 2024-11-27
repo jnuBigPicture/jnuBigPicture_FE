@@ -7,6 +7,7 @@ import {
   FlatList,
   TextInput,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 
 function Customization({}): React.JSX.Element {
@@ -27,7 +28,7 @@ function Customization({}): React.JSX.Element {
   }, []);
 
   return (
-    <View style={{flex: 1, padding: 24}}>
+    <View style={{flex: 1, padding: 5}}>
       {isLoading ? (
         <ActivityIndicator />
       ) : (
@@ -49,8 +50,10 @@ function Customization({}): React.JSX.Element {
           onPress={() =>
             HandleAddButton(newMessage, setNewMessage, data, setData)
           }>
-          <Text style={styles.sendButtonText}>Send</Text>
-        </TouchableOpacity>
+          <Image
+            source={require('../assets/send-button.png')}
+            style={{width: 20, height: 20, tintColor: '#fff', marginRight: 2}}
+          />        </TouchableOpacity>
       </View>
     </View>
   );
@@ -77,7 +80,7 @@ const RenderCustomization = (customizationProp: Customization) => {
       <TouchableOpacity
         style={styles.iconButton}
         onPress={() => console.log('Button Pressed')}>
-        <Text>삭제버튼</Text>
+        <Text>삭제</Text>
       </TouchableOpacity>
     </View>
   );
@@ -191,25 +194,27 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginBottom: 16,
     width: '100%',
-    paddingHorizontal: 8,
   },
   textInput: {
     flex: 1,
     height: 48,
     borderColor: '#ccc',
     borderWidth: 1,
-    borderRadius: 12,
+    borderRadius: 24,
     paddingHorizontal: 16,
     backgroundColor: '#fff',
   },
   sendButton: {
+    flex: 1,
     height: 48,
-    paddingHorizontal: 16,
+    width: 48,
     justifyContent: 'center',
+    position: 'absolute',
+    right: 0,
     alignItems: 'center',
     backgroundColor: '#007BFF',
-    borderRadius: 12,
-    marginLeft: 8,
+    borderRadius: 24,
+    marginLeft: 5,
   },
   sendButtonText: {
     color: '#fff',

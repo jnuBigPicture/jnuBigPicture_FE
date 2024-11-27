@@ -54,7 +54,7 @@ function AnalysisReport(): React.JSX.Element {
           <Text style={styles.title}>{report.title}</Text>
           <Image
             source={require('../assets/report-image.png')}
-            style={{width: 200, height: 200, alignSelf: 'center'}}
+            style={{width: 300, height: 300, alignSelf: 'center', marginBottom: 30}}
           />
           <Text style={styles.data}>{report.content}</Text>
         </>

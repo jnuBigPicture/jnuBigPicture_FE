@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   FlatList,
   TextInput,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 
 function Chat({}): React.JSX.Element {
@@ -28,13 +29,14 @@ function Chat({}): React.JSX.Element {
   }, []);
 
   return (
-    <View style={{ flex: 1, padding: 24 }}>
+    <View style={{flex: 1, padding: 5}}>
       {isLoading ? (
         <ActivityIndicator />
       ) : (
         <FlatList
+          style={{flex: 1, padding: 15}}
           data={data}
-          keyExtractor={({ id }) => id}
+          keyExtractor={({id}) => id}
           renderItem={renderItem}
         />
       )}
@@ -50,7 +52,10 @@ function Chat({}): React.JSX.Element {
           onPress={() =>
             handleSendMessage(newMessage, data, setData, setNewMessage)
           }>
-          <Text style={styles.sendButtonText}>Send</Text>
+          <Image
+            source={require('../assets/send-button.png')}
+            style={{width: 20, height: 20, tintColor: '#fff', marginRight: 2}}
+          />
         </TouchableOpacity>
       </View>
     </View>
@@ -63,7 +68,7 @@ interface Chat {
   message: string;
 }
 
-const renderItem = ({ item }: { item: Chat }) => {
+const renderItem = ({item}: {item: Chat}) => {
   return renderChat(item);
 };
 
@@ -94,7 +99,7 @@ const handleSendMessage = async (
     setNewMessage('');
     const updatedData = [
       ...data,
-      { id: String(data.length + 1), sender: '인형', message: newMessage },
+      {id: String(data.length + 1), sender: '인형', message: newMessage},
     ];
     setData(updatedData);
   }
@@ -103,20 +108,13 @@ const handleSendMessage = async (
 const getChatData = async (): Promise<Chat[]> => {
   const json = {
     data: [
-      { id: '1', sender: '인형', message: 'chat 예솔아 유치원 다녀왔어?' },
+      {id: '1', sender: '나', message: '예솔이한테 뽀로로 보기전에 눈높이 학습지 풀라고 해줘.'},
       {
         id: '2',
-        sender: '예솔',
-        message: '응. 그런데 나 유치원에서 안좋은 일 있었어.',
-      },
-      { id: '3', sender: '인형', message: '유치원에서 무슨 일 있었어?' },
-      { id: '4', sender: '예솔', message: '지안이가 돼지라고 놀렸어.' },
-      {
-        id: '5',
         sender: '인형',
-        message:
-          '이런. 우리 예솔이 많이 속상했겠다. 그래서 예솔이는 뭐라고 했어?',
+        message: '예솔이한테 잘 전달했어요.',
       },
+      {id: '3', sender: '인형', message: '예솔이 학습지 다 풀고, 저녁으로 시리얼 먹었어요.'},
     ],
   };
   return json.data;
@@ -159,17 +157,20 @@ const styles = StyleSheet.create({
     height: 48,
     borderColor: '#ccc',
     borderWidth: 1,
-    borderRadius: 12,
+    borderRadius: 24,
     paddingHorizontal: 16,
     backgroundColor: '#fff',
   },
   sendButton: {
+    flex: 1,
     height: 48,
-    paddingHorizontal: 16,
+    width: 48,
     justifyContent: 'center',
+    position: 'absolute',
+    right: 8,
     alignItems: 'center',
     backgroundColor: '#007BFF',
-    borderRadius: 12,
+    borderRadius: 24,
     marginLeft: 8,
   },
   sendButtonText: {
@@ -185,11 +186,11 @@ const styles = StyleSheet.create({
   },
   myMessage: {
     alignSelf: 'flex-end',
-    backgroundColor: '#dcf8c6',
+    backgroundColor: '#C9E1FF',
   },
   dollMessage: {
     alignSelf: 'flex-start',
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#E9E9E9',
   },
   senderText: {
     fontSize: 12,

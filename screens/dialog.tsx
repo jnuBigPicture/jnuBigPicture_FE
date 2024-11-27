@@ -33,11 +33,16 @@ function Dialog(): React.JSX.Element {
       {isLoading ? (
         <ActivityIndicator />
       ) : (
-        <FlatList
-          data={data}
-          keyExtractor={({id}) => id}
-          renderItem={renderItem}
-        />
+        <>
+          <Text style={{textAlign: 'center', color: '#888', marginBottom: 20}}>
+            2024.10.11 금요일
+          </Text>
+          <FlatList
+            data={data}
+            keyExtractor={({id}) => id}
+            renderItem={renderItem}
+          />
+        </>
       )}
     </View>
   );
@@ -75,9 +80,21 @@ const renderDialog = (chatProp: Dialog) => {
         styles.messageContainer,
         chatProp.sender === '인형' ? styles.dollMessage : styles.myMessage,
       ]}>
-      <Text style={styles.senderText}>{chatProp.sender}</Text>
+      <Text
+        style={[
+          styles.senderText,
+          {textAlign: chatProp.sender === '인형' ? 'left' : 'right'},
+        ]}>
+        {chatProp.sender}
+      </Text>
       <Text style={styles.messageText}>{chatProp.message}</Text>
-      <Text style={styles.dateText}>2024.10.11 18:00</Text>
+      <Text
+        style={[
+          styles.dateText,
+          {textAlign: chatProp.sender === '인형' ? 'right' : 'left'},
+        ]}>
+        2024.10.11 18:00
+      </Text>
     </View>
   );
 };
@@ -99,34 +116,31 @@ const getDialogData = async (): Promise<Dialog[]> => {
         message:
           '이런. 우리 예솔이 많이 속상했겠다. 그래서 예솔이는 뭐라고 했어?',
       },
-      {id: '1', sender: '인형', message: '예솔아 유치원 다녀왔어?'},
       {
-        id: '2',
+        id: '6',
         sender: '예솔',
-        message: '응. 그런데 나 유치원에서 안좋은 일 있었어.',
+        message:
+          '당황해서 아무말도 못하고 그 자리에서 펑펑 울었어.',
       },
-      {id: '3', sender: '인형', message: '유치원에서 무슨 일 있었어?'},
-      {id: '4', sender: '예솔', message: '지안이가 돼지라고 놀렸어.'},
       {
-        id: '5',
+        id: '7',
         sender: '인형',
         message:
-          '이런. 우리 예솔이 많이 속상했겠다. 그래서 예솔이는 뭐라고 했어?',
+          '예솔아. 그런 일 있으면 나한테 말해줘. 내가 예솔이를 도와줄게.',
       },
-      {id: '1', sender: '인형', message: '예솔아 유치원 다녀왔어?'},
       {
-        id: '2',
+        id: '8',
         sender: '예솔',
-        message: '응. 그런데 나 유치원에서 안좋은 일 있었어.',
+        message:
+          '응 그럴게. 고마워 말랑핑.',
       },
-      {id: '3', sender: '인형', message: '유치원에서 무슨 일 있었어?'},
-      {id: '4', sender: '예솔', message: '지안이가 돼지라고 놀렸어.'},
       {
-        id: '5',
+        id: '9',
         sender: '인형',
         message:
-          '이런. 우리 예솔이 많이 속상했겠다. 그래서 예솔이는 뭐라고 했어?',
+          '아니야. 예솔이가 힘들어하면 나도 힘들어. 그리고 예솔이가 행복하면 나도 행복해.',
       },
+    
     ],
   };
   return json.data;
@@ -141,11 +155,11 @@ const styles = StyleSheet.create({
   },
   myMessage: {
     alignSelf: 'flex-end',
-    backgroundColor: '#dcf8c6',
+    backgroundColor: '#C9E1FF',
   },
   dollMessage: {
     alignSelf: 'flex-start',
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#E9E9E9',
   },
   senderText: {
     fontSize: 12,
@@ -157,9 +171,9 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   dateText: {
-    alignSelf: 'flex-end',
     fontSize: 10,
     color: '#888',
+    marginTop: 8,
   },
 });
 

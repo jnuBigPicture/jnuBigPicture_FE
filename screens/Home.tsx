@@ -27,7 +27,7 @@ function HomeScreen({
             source={require('../assets/teddy-bear.png')}
             style={styles.teddyIcon}
           />
-          {!isConnected && (
+          {isConnected && (
             <>
               <Image
                 source={require('../assets/teddy-bear.png')}
