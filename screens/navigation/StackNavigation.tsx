@@ -5,6 +5,7 @@ import {
 import MainScreen from './MainScreen';
 import LoginScreen from '../LoginScreen';
 import Chat from '../Chat';
+import Customization from '../Customization';
 
 const Stack = createStackNavigator();
 
@@ -26,6 +27,7 @@ const StackNavigation = ({
       </Stack.Screen>
     )}
     <Stack.Screen name='Chat' component={Chat} />
+    <Stack.Screen name='Customization' component={Customization} />
   </Stack.Navigator>
 );
 
