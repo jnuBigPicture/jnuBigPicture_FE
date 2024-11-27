@@ -18,16 +18,16 @@ const StackNavigation = ({
 }) => (
   <Stack.Navigator>
     {isLoggedIn ? (
-      <Stack.Screen name="Main" options={{headerShown: false}}>
-        {() => <MainScreen navigation={Stack.Navigator}/>}
+      <Stack.Screen name="메인" options={{headerShown: false}}>
+        {({ navigation }) => <MainScreen navigation={navigation} />}
       </Stack.Screen>
     ) : (
-      <Stack.Screen name="Login" options={{headerShown: false}}>
+      <Stack.Screen name="로그인" options={{headerShown: false}}>
         {() => <LoginScreen setIsLoggedIn={setIsLoggedIn} />}
       </Stack.Screen>
     )}
-    <Stack.Screen name='Chat' component={Chat} />
-    <Stack.Screen name='Customization' component={Customization} />
+    <Stack.Screen name='채팅' component={Chat} />
+    <Stack.Screen name='사용자화' component={Customization} />
   </Stack.Navigator>
 );
 

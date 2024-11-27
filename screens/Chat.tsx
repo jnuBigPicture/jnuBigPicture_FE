@@ -1,10 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ActivityIndicator,
-  Button,
   FlatList,
   TextInput,
   TouchableOpacity,
@@ -20,41 +19,22 @@ function Chat({}): React.JSX.Element {
       try {
         const chatData = await getChatData();
         setData(chatData);
+        setLoading(false);
       } catch (error) {
         console.error('메시지 데이터를 가져오는 중 오류 발생:', error);
-      } finally {
-        setLoading(false);
       }
     };
-
     fetchData();
   }, []);
 
-  const renderItem = ({item}: {item: Chat}) => renderChat(item);
-
-  const handleSendMessage = async () => {
-    if (newMessage.trim()) {
-      const response = await sendMessage(newMessage);
-
-      console.log(response);
-
-      setNewMessage('');
-      const updatedData = [
-        ...data,
-        {id: String(data.length + 1), sender: '인형', message: newMessage},
-      ];
-      setData(updatedData);
-    }
-  };
-
   return (
-    <View style={{flex: 1, padding: 24}}>
+    <View style={{ flex: 1, padding: 24 }}>
       {isLoading ? (
         <ActivityIndicator />
       ) : (
         <FlatList
           data={data}
-          keyExtractor={({id}) => id}
+          keyExtractor={({ id }) => id}
           renderItem={renderItem}
         />
       )}
@@ -65,7 +45,11 @@ function Chat({}): React.JSX.Element {
           value={newMessage}
           onChangeText={setNewMessage}
         />
-        <TouchableOpacity style={styles.sendButton} onPress={handleSendMessage}>
+        <TouchableOpacity
+          style={styles.sendButton}
+          onPress={() =>
+            handleSendMessage(newMessage, data, setData, setNewMessage)
+          }>
           <Text style={styles.sendButtonText}>Send</Text>
         </TouchableOpacity>
       </View>
@@ -79,16 +63,61 @@ interface Chat {
   message: string;
 }
 
+const renderItem = ({ item }: { item: Chat }) => {
+  return renderChat(item);
+};
+
+const renderChat = (chatProp: Chat) => {
+  return (
+    <View
+      style={[
+        styles.messageContainer,
+        chatProp.sender === '인형' ? styles.dollMessage : styles.myMessage,
+      ]}>
+      <Text style={styles.senderText}>{chatProp.sender}</Text>
+      <Text style={styles.messageText}>{chatProp.message}</Text>
+      <Text style={styles.dateText}>2024.10.11 18:00</Text>
+    </View>
+  );
+};
+
+const handleSendMessage = async (
+  newMessage: string,
+  data: Chat[],
+  setData: React.Dispatch<React.SetStateAction<Chat[]>>,
+  setNewMessage: React.Dispatch<React.SetStateAction<string>>,
+) => {
+  if (newMessage.trim()) {
+    const response = await sendMessage(newMessage);
+    console.log(response);
+
+    setNewMessage('');
+    const updatedData = [
+      ...data,
+      { id: String(data.length + 1), sender: '인형', message: newMessage },
+    ];
+    setData(updatedData);
+  }
+};
+
 const getChatData = async (): Promise<Chat[]> => {
-  // const response = await fetch('https://reactnative.dev/movies.json');
   const json = {
     data: [
-      {id: '1', sender: '인형', message: 'chat 예솔아 유치원 다녀왔어?'},
-      {id: '2', sender: '예솔',message: '응. 그런데 나 유치원에서 안좋은 일 있었어.',},
-      {id: '3', sender: '인형', message: '유치원에서 무슨 일 있었어?'},
-      {id: '4', sender: '예솔', message: '지안이가 돼지라고 놀렸어.'},
-      {id: '5',sender: '인형',message:'이런. 우리 예솔이 많이 속상했겠다. 그래서 예솔이는 뭐라고 했어?',},
-      ],
+      { id: '1', sender: '인형', message: 'chat 예솔아 유치원 다녀왔어?' },
+      {
+        id: '2',
+        sender: '예솔',
+        message: '응. 그런데 나 유치원에서 안좋은 일 있었어.',
+      },
+      { id: '3', sender: '인형', message: '유치원에서 무슨 일 있었어?' },
+      { id: '4', sender: '예솔', message: '지안이가 돼지라고 놀렸어.' },
+      {
+        id: '5',
+        sender: '인형',
+        message:
+          '이런. 우리 예솔이 많이 속상했겠다. 그래서 예솔이는 뭐라고 했어?',
+      },
+    ],
   };
   return json.data;
 };
@@ -107,29 +136,13 @@ const sendMessage = async (message: string) => {
         }),
       },
     );
-
     if (!response.ok) {
       throw new Error('서버에 메시지 전송 실패');
     }
-
     return await response.json();
   } catch (error) {
     console.error('메시지 전송 중 오류 발생:', error);
   }
-};
-
-const renderChat = (chatProp: Chat) => {
-  return (
-    <View
-      style={[
-        styles.messageContainer,
-        chatProp.sender === '인형' ? styles.dollMessage : styles.myMessage,
-      ]}>
-      <Text style={styles.senderText}>{chatProp.sender}</Text>
-      <Text style={styles.messageText}>{chatProp.message}</Text>
-      <Text style={styles.dateText}>2024.10.11 18:00</Text>
-    </View>
-  );
 };
 
 const styles = StyleSheet.create({
@@ -151,7 +164,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   sendButton: {
-    height: 48, // 버튼 높이 텍스트 박스와 일치
+    height: 48,
     paddingHorizontal: 16,
     justifyContent: 'center',
     alignItems: 'center',
@@ -191,7 +204,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     fontSize: 10,
     color: '#888',
-  }
+  },
 });
 
 export default Chat;

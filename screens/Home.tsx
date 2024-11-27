@@ -44,7 +44,7 @@ function HomeScreen({
         <View style={{flexDirection: 'row'}}>
           <TouchableOpacity
             style={styles.buttonContainer}
-            onPress={() => navigation.navigate('Customization')}>
+            onPress={() => navigation.navigate('사용자화')}>
             <Text style={[{alignSelf: 'flex-start'}, styles.t_bold]}>
               인형 사용자화
             </Text>
@@ -52,7 +52,7 @@ function HomeScreen({
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.buttonContainer}
-            onPress={() => navigation.navigate('Chat')}>
+            onPress={() => navigation.navigate('채팅')}>
             <Text style={[{alignSelf: 'flex-start'}, styles.t_bold]}>
               메시지 보내기
             </Text>
