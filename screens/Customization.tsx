@@ -4,45 +4,27 @@ import {
   Text,
   StyleSheet,
   ActivityIndicator,
-  Button,
   FlatList,
   TextInput,
   TouchableOpacity,
 } from 'react-native';
 
 function Customization({}): React.JSX.Element {
-  const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState<Customization[]>([]);
+  const [isLoading, setLoading] = useState(true);
   const [newMessage, setNewMessage] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const CustomizationData = await getCustomization();
-        setData(CustomizationData);
+        setData(await GetCustomization());
+        setLoading(false);
       } catch (error) {
         console.error('사용자화 데이터를 가져오는 중 오류 발생:', error);
-      } finally {
-        setLoading(false);
       }
     };
     fetchData();
   }, []);
-
-  const renderItem = ({item}: {item: Customization}) => renderCustomization(item);
-
-  const handleSendMessage = async () => {
-    if (newMessage.trim()) {
-      const response = await addCustomizaiton(newMessage);
-      console.log(response);
-      setNewMessage('');
-      const updatedData = [
-        ...data,
-        {id: String(data.length + 1), requirement: newMessage},
-      ];
-      setData(updatedData);
-    }
-  };
 
   return (
     <View style={{flex: 1, padding: 24}}>
@@ -52,7 +34,7 @@ function Customization({}): React.JSX.Element {
         <FlatList
           data={data}
           keyExtractor={({id}) => id}
-          renderItem={renderItem}
+          renderItem={RenderItem}
         />
       )}
       <View style={styles.messageSendContainer}>
@@ -62,7 +44,11 @@ function Customization({}): React.JSX.Element {
           value={newMessage}
           onChangeText={setNewMessage}
         />
-        <TouchableOpacity style={styles.sendButton} onPress={handleSendMessage}>
+        <TouchableOpacity
+          style={styles.sendButton}
+          onPress={() =>
+            HandleAddButton(newMessage, setNewMessage, data, setData)
+          }>
           <Text style={styles.sendButtonText}>Send</Text>
         </TouchableOpacity>
       </View>
@@ -75,20 +61,87 @@ interface Customization {
   requirement: string;
 }
 
-const getCustomization = async (): Promise<Customization[]> => {
+const RenderItem = ({item}: {item: Customization}) => {
+  return RenderCustomization(item);
+};
+
+const RenderCustomization = (customizationProp: Customization) => {
+  return (
+    <View style={styles.messageContainer}>
+      <View style={styles.textContainer}>
+        <Text
+          style={
+            styles.requirementText
+          }>{`• ${customizationProp.requirement}`}</Text>
+      </View>
+      <TouchableOpacity
+        style={styles.iconButton}
+        onPress={() => console.log('Button Pressed')}>
+        <Text>삭제버튼</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+const HandleAddButton = async (
+  newMessage: string,
+  setNewMessage: React.Dispatch<React.SetStateAction<string>>,
+  data: Customization[],
+  setData: React.Dispatch<React.SetStateAction<Customization[]>>,
+): Promise<void> => {
+  if (newMessage.trim()) {
+    const response = await AddCustomizaiton(newMessage);
+    console.log(response);
+    setNewMessage('');
+    const updatedData = [
+      ...data,
+      {id: String(data.length + 1), requirement: newMessage},
+    ];
+    setData(updatedData);
+  }
+};
+
+const HandleDeleteButton = async (id: number, setData: React.Dispatch<React.SetStateAction<Customization[]>>)
+: Promise<void> => {
+  await DeleteCustomizaiton(id);
+    // setData(updatedData);
+};
+
+const DeleteCustomizaiton = async (id: number) => {
+  try {
+    const response = await fetch(
+      'https://your-server-endpoint.com/sendMessage',
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error('요구사항 삭제 실패');
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('요구사항 삭제 중 오류 발생:', error);
+  }
+};
+
+const GetCustomization = async (): Promise<Customization[]> => {
   // const response = await fetch('https://reactnative.dev/movies.json');
   const json = {
     data: [
       {id: '1', requirement: '인형 이름은 말랑핑이야.'},
       {id: '2', requirement: '아이 이름은 예솔이야.'},
       {id: '3', requirement: '예솔이 또래 친구처럼 이야기해줘.'},
-      {id: '3', requirement: '유치원에서 어땠는지 매일 물어봐.'}
+      {id: '4', requirement: '유치원에서 어땠는지 매일 물어봐.'},
     ],
   };
   return json.data;
 };
 
-const addCustomizaiton = async (requirement: string) => {
+const AddCustomizaiton = async (requirement: string) => {
   try {
     const response = await fetch(
       'https://your-server-endpoint.com/sendMessage',
@@ -112,19 +165,6 @@ const addCustomizaiton = async (requirement: string) => {
   }
 };
 
-const renderCustomization = (customizationProp: Customization) => {
-  return (
-    <View style={styles.messageContainer}>
-      <View style={styles.textContainer}>
-        <Text style={styles.requirementText}>{`• ${customizationProp.requirement}`}</Text>
-      </View>
-      <TouchableOpacity style={styles.iconButton} onPress={() => console.log('Button Pressed')}>
-        <Text>삭제버튼</Text>
-      </TouchableOpacity>
-    </View>
-  );
-};
-
 const styles = StyleSheet.create({
   messageContainer: {
     flexDirection: 'row',
@@ -143,7 +183,7 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   iconButton: {
-    padding: 5
+    padding: 5,
   },
   messageSendContainer: {
     flexDirection: 'row',
@@ -163,7 +203,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   sendButton: {
-    height: 48, // 버튼 높이 텍스트 박스와 일치
+    height: 48,
     paddingHorizontal: 16,
     justifyContent: 'center',
     alignItems: 'center',
