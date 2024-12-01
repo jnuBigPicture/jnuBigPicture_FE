@@ -114,7 +114,7 @@ const getDialogData = async (): Promise<Dialog[]> => {
         id: '5',
         sender: '인형',
         message:
-          '이런. 우리 예솔이 많이 속상했겠다. 그래서 예솔이는 뭐라고 했어?',
+          '저런. 우리 예솔이 많이 속상했겠다. 그래서 예솔이는 뭐라고 했어?',
       },
       {
         id: '6',
@@ -128,19 +128,6 @@ const getDialogData = async (): Promise<Dialog[]> => {
         message:
           '예솔아. 그런 일 있으면 나한테 말해줘. 내가 예솔이를 도와줄게.',
       },
-      {
-        id: '8',
-        sender: '예솔',
-        message:
-          '응 그럴게. 고마워 말랑핑.',
-      },
-      {
-        id: '9',
-        sender: '인형',
-        message:
-          '아니야. 예솔이가 힘들어하면 나도 힘들어. 그리고 예솔이가 행복하면 나도 행복해.',
-      },
-    
     ],
   };
   return json.data;
